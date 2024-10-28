@@ -47,8 +47,6 @@ const App = () => {
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/Logout" element={<Logout />} />
           
-          {/* Private Routes */}
-     
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/my-account" element={<Account />} />
             <Route path="/my-practices" element={<Practice />} />
