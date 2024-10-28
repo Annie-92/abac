@@ -1,0 +1,460 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+.flex-space-between{
+  display: flex;
+  justify-content: space-between ;
+  align-items: center;
+}
+.flex-start{
+  display: flex;
+  justify-content: flex-start ;
+  align-items: center;
+}
+.flex-center{
+  display: flex;
+  justify-content: center ;
+  align-items: center;
+}
+
+.practice-item{
+  margin-bottom: 10px;
+}
+
+/* label{
+  color:#71065E;
+  font-weight: 400;;
+} */
+ 
+.mb-50{
+  width: calc(50% - 15px);
+}
+.switch-btn{
+  margin-right: 10px;;
+}
+  
+  .practice-box {
+    width: calc(100% - 100px);
+    padding:0 ;
+    position:relative;
+    margin: 50px auto;
+    /* border: 2px solid #ebe4ff; */
+   border: 1px solid #e2e1e1;
+    border-radius: 10px;
+   /* box-shadow: 0 2px 3px black, inset 0 0 3px white; */
+   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+   background-color: #fff;
+  }
+
+  .practice-box  .head{
+   padding: 20px;
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+   color: #fff;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.practice-box  .head svg{
+
+  width: 30px;height: 30px;margin-right: 20px;
+}
+
+.practice-box  h1{
+    text-align: center;
+    font-weight: 300;;
+  
+
+}
+
+  .practice-box input[type="number"] {
+    text-align: center;
+    width: 50px;
+    margin: 0 2px;
+  }
+
+  .practice-box input[type="text"] {
+    text-align: center;
+    width: 100%; max-width: 70%;margin: auto;display: block;
+    height: 40px;
+    
+  }
+  .practice-box input[type="submit"] {
+    float: right;
+  }
+
+
+  .practice-box select {
+        padding: 5px;
+  }
+  
+  #game {
+    min-height: 300px;
+  }
+  #game span.left,
+  #game span.correct {
+    font-size: 18px;
+    position: absolute;
+    top: 20px;
+  }
+  #game span.left {
+    left: 20px;
+  }
+  #game span.correct {
+    right: 20px;
+  }
+  #game .banner {
+    text-align: center;
+    margin-top: 40px;
+    padding: 10px 0;
+    line-height: 54px;
+    font-size: 36px;
+    background-color: #ebe4ff;
+  }
+  #game .banner .end {
+    display: none;
+  }
+  #game .banner p {
+    font-size: 14px;
+    line-height: 24px;
+    margin: 0;
+  }
+  #game .banner p.correct {
+    font-size: 36px;
+    line-height: 56px;
+  }
+  #game .banner.wide {
+    height: auto;
+  }
+  #game .banner input {
+    font-size: 36px;
+    font-family: inherit;
+    width: 180px;
+  }
+ 
+  table th {
+    text-align: left;
+  }
+  .game-options {
+    padding: 20px;
+  }
+  .game-options p{
+    text-align: center; margin-bottom: 20px;
+  }
+
+  /* .game-options div{
+    margin-bottom: 10px;;
+  } */
+
+  .dashboard .practice-box .game-options .switch-class {
+    display: block;
+
+    margin-right: 10px;
+    position: relative;
+    top: -2px;
+    z-index: 1;
+  }
+
+  .dashboard .practice-box .game-options .switch-class span {
+
+    width: 100px;;height: 30px;
+  
+  }
+
+  .practice-area{
+    height: 300px;width: 500px;
+    border: 1px solid rgba(0,0,0,0.3);
+    border-radius: 5px;
+    margin: 20px;
+    display: flex;justify-content: center;align-items: center;
+    flex-wrap: wrap;
+  }
+.MentalCalcNbr{
+  font-size: 60px;font-weight: 800;color: #000;display: block;
+  width: 100%;text-align: center; margin-bottom: 20px;
+}
+.practice-btn{
+ /* width: 300px; */
+ padding: 0.7rem 1.75rem;
+ display: flex;justify-content: center;align-items: center;
+ 
+  color: #fff !important;
+  outline: none;
+  border: none;
+  border-radius: 5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+  margin: 15px;
+
+}
+
+.m-15-auto{
+  margin: 15px auto !important;
+}
+
+.practice-btn:hover{
+  opacity: 0.8;
+}
+
+.practice-btn svg{
+  height: 20px;width: 20px;margin-right: 8px;
+}
+
+.settings-panel {
+  display: block;
+}
+.practice-panel{
+  /* display: none; */
+}
+
+.setting-item {
+  margin-bottom: 10px;
+}
+
+.option-group {
+  display: flex;
+  gap: 10px; /* Adjust gap as needed */
+}
+
+.option {
+  background-color: #f0f0f0;
+  font-family: "Quicksand", sans-serif;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.option.active {
+  background-color: #353535;
+  color: #fff;
+}
+
+.setting-item{
+  display: flex;padding: 0 20px;margin: 10px;
+  height: 80px;align-items: center;
+  border-bottom: 1px solid #e1dede;
+}
+.setting-item label{
+  font-family: "Quicksand", sans-serif;
+  width: 300px;
+  font-weight: 700;
+  font-size: 20px;
+
+}
+
+.setting-item .option-group input[type="number"] {
+  width: 50px;
+  text-align: center;
+  margin: 0 10px;
+}
+
+.setting-item .option-group .changeNbr {
+  padding: 5px 10px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+.flashAnzanDisplay{
+  display: flex;justify-content: center;align-items: center; flex-wrap: wrap;
+}
+
+.flashAnzanDisplay .flashAnzanDisplay__numbers{
+ width: 100%;text-align: center;font-size: 40px;font-weight: 600;
+}
+
+.flashAnzanDisplay .flashAnzanDisplay__answer{
+
+  width: 100%;max-width: 200px;margin:20px auto;
+  
+}
+
+.flashAnzanDisplay__answer  {
+
+  width: 300px;display: flex;justify-content: center;align-items: center;
+
+}
+
+.flashAnzanDisplay__answer button {
+
+  height: 40px; padding: 5px 15px;text-align: center;  appearance: none; border: none;color: #fff;font-weight: 600;
+  font-size: 18px;border-radius: 5px;margin: 10px;
+
+}
+
+
+.flash {
+  animation: flash 1s infinite;
+}
+
+@keyframes flash {
+  0% { color: black; }
+  50% { color: transparent; }
+  100% { color: black; }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+}
+
+.ResultBx{
+  display: flex;justify-content: center;align-items: center;flex-wrap: wrap;
+  margin: 20px;
+}
+
+.ResultBx h2{
+  width: 100%;text-align: center;
+}
+
+
+.ResultBx .result{
+  width: 100%;text-align: center;font-size: 18px;font-weight: 700;
+}
+
+.ResultBx .result.correct{
+   color: green;
+}
+
+.ResultBx .result.incorrect{
+  color: red;
+}
+
+
+
+
+/* Styles for the modal */
+.custom-modal .ant-modal-content {
+  border-radius: 10px; /* Rounded corners for the modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  padding: 0 !important;
+}
+
+.custom-modal .ant-modal-header {
+  background-color: #f0f0f0; /* Light gray background for header */
+  border-bottom: 1px solid #e0e0e0; /* Light border */
+  border-radius: 10px 10px 0 0; /* Rounded top corners */
+
+}
+
+.custom-modal .ant-modal-footer {
+  padding: 20px;
+}
+
+.custom-modal .modal-header{
+  display: none;
+}
+
+.custom-modal .ant-modal-title {
+  color: #333; /* Dark color for the title text */
+  font-size: 24px; /* Larger font size for the title */
+  font-weight: 400; /* Bold title text */
+  text-align: left;
+  padding: 15px;
+  background-color: rgb(3 191 166 / 42%) !important;
+}
+
+.custom-modal .ant-modal-body {
+  padding: 20px; /* Add padding inside the modal body */
+}
+
+.custom-modal .form-control {
+  border-radius: 5px; /* Rounded input fields */
+  border: 1px solid #ccc; /* Light border for input fields */
+  padding: 8px; /* Padding inside input fields */
+}
+
+.custom-modal .btn-close {
+  color: #999; /* Color for the close button */
+  font-size: 16px; /* Font size for the close button */
+}
+
+.custom-modal .btn-close:hover {
+  color: #333; /* Darker color on hover */
+}
+
+.custom-modal .form-check-label {
+  color: #333; /* Dark color for form labels */
+}
+
+.custom-modal .form-check-input {
+  margin-top: 3px; /* Adjust margin for checkboxes */
+}
+
+.custom-modal .form-check-input:checked {
+  background-color: #4caf50; /* Color for checked checkboxes */
+}
+
+.custom-modal h4 {
+  margin: 10px 0 20px 0;
+  font-size: 20px;
+}
+
+.custom-modal .input-group {
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.custom-modal .input-group-text {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  padding: 0.5rem 1rem;
+}
+
+.custom-modal .form-control {
+  border-radius: 0 5px 5px 0;
+}
+
+.custom-modal .form-check {
+  margin-left: 0;
+  margin-top: 10px;
+}
+
+.custom-modal .text-body-secondary {
+  color: #6c757d; /* Use a slightly darker shade of gray */
+  font-size: 0.8em;
+}
+
+.custom-modal .form-check .form-check-label{
+  margin-right: 15px;
+}
+
+.FlashCardsForm{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.FlashCardsForm input[type="text"]{
+  width: 150px;
+  margin: 10px !important;
+}
+
+.results-panel{
+  padding: 20px;
+}
+
+.results-panel h2{
+  text-align: center; 
+}

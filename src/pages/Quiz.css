@@ -1,0 +1,145 @@
+
+  .timer {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .tableContent{
+  width: calc(100% - 40px);
+  position: relative;
+  }
+  
+  table {
+    display: block;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 1100px;
+    /* width: 80%; */
+    margin: 16px auto;
+    overflow: scroll;
+  }
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding:8px 1px;
+    text-align: center;
+    white-space: nowrap; /* add this property to prevent line breaks */
+  }
+  
+  th {
+    /* background-color: #f2f2f2; */
+    background-color: #EBDDF2;
+    color: #333333;
+    font-weight: bold;
+    width: 60px;
+     /* set the width of each th element */
+    text-align: center !important;
+  }
+  .col-title{
+    width: 0.2%;
+    background-color: #EBDDF2;
+    color: #333333;
+    font-weight: bold;
+  }
+  
+  .operator{
+    width: 0.2%;
+  }
+  td {
+    width: 1%; /* set the width of each td element to 1% of the table width */
+  }
+
+  .right-answer {
+    background-color: #b0c92378;
+  }
+  
+  .wrong-answer {
+    background-color: #c9236159;
+  }
+  .answer-input {
+    transition: background-color 0.3s ease;
+  }
+  
+  input[type="number"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+    width: 100%;
+    padding:8px 1px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+  
+.pageBtn{
+  width: 120px;
+  margin: 10px;
+  padding: 7px;
+  font-size: 18px;
+  background-color: #23C978;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.submitBtn{
+  width: 200px;
+  margin: 20px;
+  padding: 10px;
+  font-size: 18px;
+  background-color: #E15C83;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+
+.countdown img{
+width: 67%;
+}
+
+.countdown h2{
+  font-size: 24px;text-align: center;
+}
+
+.timer-green{background-color: #03BFA6;}
+.timer-yellow{background-color: #E1B12C;}
+.timer-pink{background-color: #E2A081;}
+.timer-purple{background-color: #A672B0;}
+
+.timer-box {
+  display: flex; align-items: center;justify-content: center;flex-wrap: wrap;
+  width: 120px;height: 120px;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+.timer-box span{
+  display: block;
+  width: 100%; text-align: center;
+  color: #fff;
+}
+
+.timer-box span:nth-child(1){
+  font-weight: 700;font-size: 40px;
+}
+.timer-box span:nth-child(2){
+  font-weight: 400;
+}

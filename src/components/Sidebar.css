@@ -1,0 +1,171 @@
+
+
+.dashboard{
+display: flex;
+}
+
+.ps-sidebar-root{
+	width: unset !important;
+}
+
+.dashboard__content{
+	flex-grow: 1;
+    flex-shrink: 1;
+	/* margin-left: 250px; */
+	background-color: #F4F5FF;
+
+}
+
+.SideMenu{
+	height: 92vh;
+}
+
+.SideMenu a{
+	text-decoration: none;
+	color: #000;
+}
+
+.SideMenu .active li{
+  background-color: #8F3B81;
+  color: #fff;
+}
+
+.SideMenu .active li:hover{
+	background-color: #8F3B81 !important;
+	color: #fff !important;
+  }
+.SideMenuItem{
+	height: 92vh;
+    background-color: #fff; 
+    position: relative;
+	width: 250px;
+	box-shadow: 0 0px 3px 0 rgba(32, 33, 36, 0.18);
+	padding: 10px 0;
+
+}
+.SideMenuItem--collapsed{
+	width: 70px;
+}
+
+
+  
+  .ps-menuitem--collapsed .ps-menu-label {
+	display: none;
+  }
+
+
+.css-ewdv3l {
+    width: 100%;
+
+}
+.profile-menu-item-bottom{
+    position: absolute !important;
+    bottom:10px;
+}
+
+
+.ps-menu-label a{
+  text-decoration: none !important;
+  color: #000;
+}
+.db_content{
+	padding: 20px;
+	margin: auto;
+	position: relative;
+}
+
+
+ .app .btn-toggle {
+	 cursor: pointer;
+	 display: none;
+}
+ .app .sidebar-btn-wrapper {
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+}
+ .app .sidebar-btn-wrapper .sidebar-btn {
+	 padding: 1px 15px;
+	 border-radius: 40px;
+	 background: rgba(255, 255, 255, 0.05);
+	 color: #adadad;
+	 text-decoration: none;
+	 margin: 0 auto;
+	 height: 35px;
+	 display: flex;
+	 align-items: center;
+	 justify-content: center;
+	 text-overflow: ellipsis;
+	 overflow: hidden;
+}
+ .app .sidebar-btn-wrapper .sidebar-btn span {
+	 margin-left: 5px;
+	 font-size: 13px;
+}
+ .app .sidebar-btn-wrapper .sidebar-btn:hover {
+	 color: #d8d8d8;
+}
+ .app .collapsed .sidebar-btn {
+	 display: inline-block;
+	 border-radius: 50%;
+	 width: 35px;
+	 height: 35px;
+	 line-height: 40px;
+	 padding: 0;
+}
+ .app main {
+	 padding: 24px;
+	 flex-grow: 1;
+	 display: flex;
+	 flex-direction: column;
+	 overflow-y: auto;
+}
+ .app main header {
+	 margin-bottom: 16px;
+	 border-bottom: 1px solid #efefef;
+}
+ .app main footer {
+	 margin-top: auto;
+	 color: #888;
+	 text-align: center;
+}
+ .app main footer a {
+	 text-decoration: none;
+	 color: #888;
+}
+ .app main footer a:hover {
+	 text-decoration: underline;
+}
+ .app .block {
+	 display: flex;
+	 margin-bottom: 24px;
+	 font-size: 14px;
+	 color: #545454;
+}
+ .app .block > span {
+	 margin-left: 10px;
+}
+ @media (max-width: 992px) {
+	 .app .btn-toggle {
+		 display: flex;
+	}
+}
+ .badge {
+	 padding: 3px 6px;
+	 font-size: 9px;
+	 letter-spacing: 1px;
+	 border-radius: 15px;
+}
+ .badge.red {
+	 color: #fff;
+	 background: #d63030;
+}
+ .badge.gray {
+	 color: #fff;
+	 background: #777;
+}
+ .badge.yellow {
+	 color: #000;
+	 background: #ffd331;
+}
+ 

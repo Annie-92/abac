@@ -1,0 +1,169 @@
+
+.LoginGrid{
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: flex-start;
+  height: 91vh;
+}
+
+.LoginGrid .left{
+  width: calc(70% - 0px);
+  background-color: #F4F5FF;
+  height: 100%;
+  display: flex;
+  align-items: center;justify-content: center;
+  position: relative;
+}
+
+.LoginGrid .right{
+  width: calc(30% - 0px);
+  height: 100%;
+  /* background-color: #ebe4ff; */
+  background-color: #fff;
+    display: flex;
+  align-items: center;justify-content: center;
+}
+
+.LoginGrid2{
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: flex-start;
+  height: 91vh;
+}
+
+.LoginGrid2 .left{
+  width: calc(50% - 0px);
+  background-color: #F4F5FF;
+  height: 100%;
+  display: flex;
+  align-items: center;justify-content: center;
+  position: relative;
+}
+
+.LoginGrid2 .right{
+  width: calc(50% - 0px);
+  height: 100%;
+  /* background-color: #ebe4ff; */
+  background-color: #fff;
+    display: flex;
+  align-items: center;justify-content: center;
+}
+
+.login-container{
+  width: 100%;
+}
+.login-other-area{
+  width: 100%;
+  max-width: 90%;
+  margin:20px auto !important;
+}
+.login-other-area a{
+  color:#03bfa6;text-align: center;text-transform: capitalize;text-decoration: none;
+}
+
+.login-other-area span{
+  margin-right: 10px; color: rgba(0,0,0,0.65);
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+  .login-field{
+    width: 100%;
+    max-width: 90%;
+    margin:10px auto !important;
+    margin-bottom: 15px;;
+    background-color: #fff;
+  }
+  .login-field2{
+    width: 50%;
+    display: inline-block;
+    max-width: 48%;
+   margin: 10px auto !important;
+
+    background-color: #fff;
+  }
+  .login-label {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .login-input {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+  }
+  
+  .login-button {
+    width: 100%;
+    max-width: 90%;
+    margin:auto !important;
+    padding: 8px ;
+     background-color: #03bfa6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-button:hover{
+    background-color: #1cc9b2 ;
+  }
+
+  .login-button span{
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .login-error {
+    margin-top: 10px;
+    color: red;
+    font-size: 14px;
+  }
+  .PageTitle{
+    height: 80px; display: flex;justify-content: center;align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .PageTitle h1{
+   text-align: center; width: 100%;
+  }
+
+  .PageTitle .brief{
+   color: rgba(0,0,0,0.65);font-size: 16px;margin: 10px auto;width: 100%;text-align: center;
+   }
+
+  .LoginBg{
+    padding-inline-start: 3rem;
+
+  }
+
+  .LoginBg .bg1{
+    width: 95%;margin: auto; display: block;z-index: 5 !important;position: relative;
+    /* width: calc(100% - 100px);margin: auto; */
+  }
+
+  .LoginBg .bg2{
+    width: 100%; position: absolute;bottom: 0;right: 0;left: 0;margin: auto;z-index: 0;
+
+
+  }
+
+  .css-9ddj71-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+    border-color: #03bfa6 !important;
+  }
+  .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+    border-color: #03bfa6 !important;
+  }
+  .css-1jy569b-MuiFormLabel-root-MuiInputLabel-root{
+    color: #03bfa6 !important;
+  }
+  

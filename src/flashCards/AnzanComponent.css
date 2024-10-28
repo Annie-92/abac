@@ -1,0 +1,102 @@
+
+
+#game-modal {
+	text-align:center;
+	display:none;
+}
+#game-otvet {
+	text-align:center;
+	display:none;
+}
+#anzan {
+	display:inline-block;
+	margin:40px auto;
+	/* height:513px; */
+	overflow:hidden;
+	border: 5px solid #7b7b7b;
+	position: relative;
+}
+.AnzanLine{
+		float:left;
+}
+
+.ryad {
+	background:url(../../src/assets/images/line.png) repeat-y;
+	background-position:center center;
+	width:120px;
+	display:inline-block;
+	/* float:left; */
+	height:420px;
+	overflow: hidden;
+}
+
+.ryad-top {
+	padding-top:10px;
+}
+
+.ryad-bot {
+	padding-top:3px;
+	padding-bottom:6px;
+}
+
+
+
+.akost {
+	background:url(../../src/assets/images/bead.png) no-repeat;
+	background-size:120px;
+	width:120px;
+	height:90px;
+}
+.ukost {
+	background:url(../../src/assets/images/bead.png) no-repeat;
+	background-size:120px;
+	width:120px;
+	height:90px;
+}
+.hline {
+	position:absolute;
+	top:150px;
+	background:url(../../src/assets/images/line.png) repeat-x;
+	height:9px;
+	width:100%;
+}
+
+.metka {
+	margin-top:55px;
+}
+.tmetka {
+	margin-bottom:69px;
+}
+.top {
+	height:150px;
+}
+
+.tochka {
+	width: 8px;
+    vertical-align: middle;
+    height: 8px;
+    background: #d7d7d7;
+    border-radius: 80px;
+    position: absolute;
+    display: inline-block;
+    right: 56px;
+    top: 1px;
+}
+
+.two {
+	display:none;
+}
+.three {
+	display:none;
+}
+
+
+
+
+
+
+
+
+
+
+
