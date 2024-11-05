@@ -61,5 +61,5 @@
   "devDependencies": {
     "web-vitals": "^3.5.2"
   },
-  "proxy": "http://localhost:8888"
+  "proxy": "https://abac.colitely.com"
 }
