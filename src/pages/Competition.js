@@ -6,14 +6,21 @@ import axios from "axios";
 import { API_URL } from '../constants/apiConstants';
 import moment from 'moment';
 import CountDownImg from "../assets/images/illustrations/countdown3.svg";
+import { fetchUserData } from '../api/FetchUser';
+import withProtectedPage from '../withProtectedPage';
+
 
 const getToken = () => localStorage.getItem('token');
+
+
 
 const Competition = () => {
   const [tables, setTables] = useState([]);
   const [quizTables, setQuizTables] = useState([]);
   const [quizTimeLeft, setQuizTimeLeft] = useState(null); // Timer for the quiz
   const [timeLeft, setTimeLeft] = useState(6 * 60); // 6 minutes
+  const [isVerified, setIsVerified] = useState(false);
+
 
   const [countdownTimeLeft, setCountdownTimeLeft] = useState(null); // Timer for the countdown
   const [answers, setAnswers] = useState([]);
@@ -24,6 +31,17 @@ const Competition = () => {
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [isQuizActive, setIsQuizActive] = useState(false); // Track if the quiz is currently active
   const [isLoading, setIsLoading] = useState(true); // Add loading state
+
+
+    // Fetch user data to check if verified
+    useEffect(() => {
+      fetchUserData().then((data) => {
+        if (data) {
+          setIsVerified(data.is_verified === 1);
+        }
+       
+      });
+    }, []);
 
   const initializeAnswers = (totalAnswers) => {
     setAnswers(Array.from({ length: totalAnswers }, () => []));
@@ -259,6 +277,23 @@ const handlePrevPage = () => {
     }
   });
 
+  if (!isVerified) {
+    return (
+      <div className="dashboard">
+        <div className="SideMenu">
+        <Sidebar />
+        </div>
+        <div className="dashboard__content">
+          <div className="db_content">
+            <h2>Access Restricted</h2>
+            <p>Your account is not verified. Please wait for the admin to verify your account.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <div className="dashboard">
     <div className="SideMenu">
@@ -350,4 +385,4 @@ const handlePrevPage = () => {
   );
 };
 
-export default Competition;
+export default withProtectedPage(Competition);

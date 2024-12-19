@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Sidebar from "../components/Sidebar";
 import { MdOutlineShutterSpeed } from "react-icons/md";
+import withProtectedPage from '../withProtectedPage';
 
 const SpeadDrillStart = () => {
   const location = useLocation();
@@ -197,4 +198,4 @@ const SpeadDrillStart = () => {
   );
 };
 
-export default SpeadDrillStart;
+export default withProtectedPage(SpeadDrillStart);

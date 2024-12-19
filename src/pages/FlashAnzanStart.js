@@ -7,7 +7,7 @@ import { MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
 import { FetchNbrExamples } from '../api/FetchAnzanExamples';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-
+import withProtectedPage from '../withProtectedPage';
 
 const FlashAnzanStart = () => {
   const [data, setData] = useState([]);
@@ -192,4 +192,4 @@ const handleAnswerSubmit = (event) => {
   );
 };
 
-export default FlashAnzanStart;
+export default withProtectedPage(FlashAnzanStart);

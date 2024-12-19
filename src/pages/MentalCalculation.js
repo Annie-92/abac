@@ -9,6 +9,7 @@ import { FaRegPauseCircle } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { LuSearchCheck } from "react-icons/lu";
 import Switch from 'react-switch';
+import withProtectedPage from '../withProtectedPage';
 
 const MentalCalculation = () => {
   const [numbers, setNumbers] = useState([]);
@@ -279,4 +280,4 @@ const MentalCalculation = () => {
   );
 };
 
-export default MentalCalculation;
+export default withProtectedPage(MentalCalculation);

@@ -39,6 +39,22 @@ const Dashboard = (props) => {
     return <div>Loading...</div>; // Render a loading indicator
   }
 
+  if (!isTeacher && !isVerified) {
+    return (
+      <div className="dashboard">
+        <div className="SideMenu">
+          <Sidebar setLoggedIn={props.setLoggedIn} />
+        </div>
+        <div className="dashboard__content">
+          <div className="db_content">
+            <h2>Access Restricted</h2>
+            <p>Your account is not verified. Please wait for the admin to verify your account.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   if(isTeacher){
     return (

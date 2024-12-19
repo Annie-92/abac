@@ -6,6 +6,8 @@ import {  MdFlashAuto } from "react-icons/md";
 import { MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
 import { MdError } from "react-icons/md"; 
+import withProtectedPage from '../withProtectedPage';
+
 
 import SettingsPanel from '../flashAnzan/SettingsPanel';
 
@@ -167,4 +169,4 @@ const FlashAnzan = () => {
   );
 };
 
-export default FlashAnzan;
+export default withProtectedPage(FlashAnzan);

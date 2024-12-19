@@ -8,8 +8,8 @@ import Alert from '@mui/material/Alert';
 import InfoIcon from '@mui/icons-material/Info';
 import ErrorIcon from '@mui/icons-material/Error';
 import { useLoader } from "../context/LoaderContext";
-
-
+import { fetchUserData } from '../api/FetchUser';
+import withProtectedPage from '../withProtectedPage';
 
 
 const getToken = () => localStorage.getItem('token');
@@ -30,8 +30,18 @@ const Quiz = () => {
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [quizStatus, setQuizStatus] = useState({ is_allowed: null, attempts_remaining: 0 });
   const { showLoader, hideLoader } = useLoader(); // Access loader methods
+  const [isVerified, setIsVerified] = useState(false);
 
 
+  // Fetch user data to check if verified
+  useEffect(() => {
+    fetchUserData().then((data) => {
+      if (data) {
+        setIsVerified(data.is_verified === 1);
+      }
+     
+    });
+  }, []);
   
 
   const fetchQuizStatus = async () => {
@@ -466,6 +476,22 @@ const padAnswersArray = () => {
     }
   });
 
+  if (!isVerified) {
+    return (
+      <div className="dashboard">
+        <div className="SideMenu">
+          <Sidebar />
+        </div>
+        <div className="dashboard__content">
+        <div className="db_content">
+            <h2>Access Restricted</h2>
+            <p>Your account is not verified. Please wait for the admin to verify your account.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   if (quizStatus.is_allowed === 0) {
     console.log('quizStatus');
@@ -571,4 +597,4 @@ const padAnswersArray = () => {
      }
 };
 
-export default Quiz; 
+export default withProtectedPage(Quiz); 

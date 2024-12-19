@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import { TbMathSymbols } from "react-icons/tb";
 import { MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
+import withProtectedPage from '../withProtectedPage';
 
 const MentalArithmetic = () => {
 
@@ -51,4 +52,4 @@ const MentalArithmetic = () => {
   );
 };
 
-export default MentalArithmetic;
+export default withProtectedPage(MentalArithmetic);

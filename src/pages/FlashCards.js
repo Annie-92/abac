@@ -6,6 +6,7 @@ import Sidebar from "../components/Sidebar";
 import SettingsPanel from '../flashCards/SettingsPanel';
 import AnzanComponent from '../flashCards/AnzanComponent';
 import AnswerInput from '../flashCards/AnswerInput';
+import withProtectedPage from '../withProtectedPage';
 
 const FlashCards = () => {
   const [gameMode, setGameMode] = useState('singlePlayer');
@@ -332,4 +333,4 @@ const handleAnswerSubmit = (answers) => {
   );
 };
 
-export default FlashCards;
+export default withProtectedPage(FlashCards);

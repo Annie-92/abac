@@ -7,6 +7,7 @@ import Sidebar from "../components/Sidebar";
 import '../Style/Practice.css';
 import { MdOutlineShutterSpeed, MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
+import withProtectedPage from '../withProtectedPage';
 
 
 const SpeadDrill = () => {
@@ -257,4 +258,4 @@ const SpeadDrill = () => {
   );
 };
 
-export default SpeadDrill;
+export default withProtectedPage(SpeadDrill);

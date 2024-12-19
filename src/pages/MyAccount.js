@@ -6,7 +6,6 @@ import { fetchUserData } from '../api/FetchUser';
 
 
 
-
 const Account = () => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
