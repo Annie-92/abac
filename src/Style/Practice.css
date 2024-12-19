@@ -137,7 +137,7 @@
     text-align: left;
   }
   .game-options {
-    padding: 20px;
+    padding: 0;
   }
   .game-options p{
     text-align: center; margin-bottom: 20px;
@@ -260,12 +260,29 @@
   cursor: pointer;
 }
 
+.mh200{
+  min-height: 200px;
+}
+
+.disclaimer {
+  color: #f06e5b;
+  font-size: 18;
+  margin: 10px;
+  text-align: center;
+  display: flex;justify-content: center;align-items: center;
+}
+
+.flashAnzanDisplayarea{
+  height: 100px;
+}
+
 .flashAnzanDisplay{
   display: flex;justify-content: center;align-items: center; flex-wrap: wrap;
+  width: 100%;
 }
 
 .flashAnzanDisplay .flashAnzanDisplay__numbers{
- width: 100%;text-align: center;font-size: 40px;font-weight: 600;
+ width: 100%;text-align: center;font-size: 68px;font-weight: bold;
 }
 
 .flashAnzanDisplay .flashAnzanDisplay__answer{
@@ -278,6 +295,15 @@
 
   width: 300px;display: flex;justify-content: center;align-items: center;
 
+}
+
+.flashAnzanDisplay__answer input[type="number"]{
+  text-align: center;
+  width: 100%;
+  max-width: 70%;
+  margin: auto;
+  display: block;
+  height: 40px;
 }
 
 .flashAnzanDisplay__answer button {
@@ -300,21 +326,82 @@
 
 .fade-enter {
   opacity: 0;
+  transform: scale(0.9);
 }
-
 .fade-enter-active {
   opacity: 1;
-  transition: opacity 500ms;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-
 .fade-exit {
   opacity: 1;
+  transform: scale(1);
 }
-
 .fade-exit-active {
   opacity: 0;
-  transition: opacity 500ms;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
+
+.slide-enter {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.slide-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.slide-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+.slide-exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.zoom-enter {
+  transform: scale(0.5);
+  opacity: 0;
+}
+.zoom-enter-active {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+.zoom-exit {
+  transform: scale(1);
+  opacity: 1;
+}
+.zoom-exit-active {
+  transform: scale(0.5);
+  opacity: 0;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.fade-scale-enter {
+  opacity: 0;
+  transform: scale(0.5);
+}
+.fade-scale-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.fade-scale-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+.fade-scale-exit-active {
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+
 
 .ResultBx{
   display: flex;justify-content: center;align-items: center;flex-wrap: wrap;
@@ -327,7 +414,8 @@
 
 
 .ResultBx .result{
-  width: 100%;text-align: center;font-size: 18px;font-weight: 700;
+  width: 100%;text-align: center;font-size: 40px;font-weight: bold;
+  font-family: "Quicksand", sans-serif;
 }
 
 .ResultBx .result.correct{
@@ -443,7 +531,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px;
+  padding: 10px;
 }
 
 .FlashCardsForm input[type="text"]{
@@ -458,3 +546,37 @@
 .results-panel h2{
   text-align: center; 
 }
+
+.feedback-message{
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+  padding: 10px;
+  font-family: "Quicksand", sans-serif;
+}
+
+.feedback-message.green{
+   color: #4caf50;
+}
+
+.feedback-message.red{
+  color: #ea2727;
+}
+
+
+
+@keyframes flashAnzan {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+

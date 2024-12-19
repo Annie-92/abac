@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import {  MdFlashAuto } from "react-icons/md";
 import { MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
+import { MdError } from "react-icons/md"; 
 
 import SettingsPanel from '../flashAnzan/SettingsPanel';
 
@@ -21,6 +22,8 @@ const FlashAnzan = () => {
   const [cards, setCards] = useState([]); 
   const [numImpressions, setNumImpressions] = useState(1); // Add this line
   const [periodicity, setPeriodicity] = useState(500);
+  const [disclaimer, setDisclaimer] = useState('');
+
 
   const navigate = useNavigate();
 
@@ -65,6 +68,11 @@ const FlashAnzan = () => {
   };
 
   const handleStart = () => {
+    if (!numRows || numRows === '') {
+      setDisclaimer('Please select the Number of Rows before starting the game.');
+      return; // Prevent navigation
+  }
+  setDisclaimer(''); // Clear disclaimer if validation passes
     navigate('/FlashAnzanStart', {
       state: {
         gameMode,
@@ -120,6 +128,13 @@ const FlashAnzan = () => {
 
                   </div>
 
+
+                  {disclaimer && (
+        <p className="disclaimer">
+            <MdError style={{ marginRight: '5px' }} /> {/* Add the icon */}
+            {disclaimer}
+        </p>
+    )}
 
               <div className='flex-center'>
           <button className='practice-btn orange-bg' onClick={handleStart}  type="button">

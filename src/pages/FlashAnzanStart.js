@@ -6,7 +6,8 @@ import {  MdFlashAuto } from "react-icons/md";
 import { MdPlayCircleOutline } from "react-icons/md";
 import { IoPlaySkipBackCircleOutline } from "react-icons/io5";
 import { FetchNbrExamples } from '../api/FetchAnzanExamples';
-import { CSSTransition } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+
 
 const FlashAnzanStart = () => {
   const [data, setData] = useState([]);
@@ -20,6 +21,8 @@ const FlashAnzanStart = () => {
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [showAnswerInput, setShowAnswerInput] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -34,74 +37,66 @@ const FlashAnzanStart = () => {
     fetchExamples();
   }, []);
 
+
+
   useEffect(() => {
-    if (data[currentIndex] && Array.isArray(data[currentIndex])) {
-      let numbers = data[currentIndex];
-      let timeoutId = null;
-      let index = 0;
-      function showNextNumber() {
-        if (index < numbers.length) {
-          console.log(`Updating currentNumber to ${numbers[index]}`);
+    if (finished) {
+        setCurrentNumber(null); // Clear the current number when finished
+        setShowAnswerInput(false); // Hide the input
+    } else if (data[currentIndex] && Array.isArray(data[currentIndex])) {
+        const numbers = data[currentIndex];
+        let timeoutId = null;
+        let index = 0;
 
-          setCurrentNumber(numbers[index]);
-          timeoutId = setTimeout(() => {
-            index++;
-            showNextNumber();
-          }, periodicity);
-        } else {
-          setCurrentNumber('?');
+        function showNextNumber() {
+            if (index < numbers.length) {
+                setCurrentNumber(null); // Temporarily clear the number to trigger re-render
+                setTimeout(() => {
+                    setCurrentNumber(numbers[index]); // Set the next number
+                    index++;
+                    timeoutId = setTimeout(showNextNumber, periodicity); // Schedule the next number
+                }, 50); // Small delay for proper re-render
+            } else {
+                setCurrentNumber('?'); // Show `?` at the end
+                setShowAnswerInput(true); // Show the answer input
+            }
         }
-      }
-      showNextNumber();
-      return () => clearTimeout(timeoutId);
-    }
-  }, [currentIndex, data, periodicity]);
 
+        showNextNumber();
+        return () => clearTimeout(timeoutId);
+    }
+}, [currentIndex, data, periodicity, finished]);
 
   
 
-  const handleAnswerSubmit = (event) => {
-    event.preventDefault();
-    const correctAnswer = data[currentIndex].reduce((acc, current) => acc + parseInt(current, 10), 0);
-    if (parseInt(answer, 10) === correctAnswer) {
+const handleAnswerSubmit = (event) => {
+  event.preventDefault();
+  const correctAnswer = data[currentIndex].reduce((acc, current) => acc + parseInt(current, 10), 0);
+
+  if (parseInt(answer, 10) === correctAnswer) {
       setResult('correct');
       setScore(score + 1);
-    } else {
+  } else {
       setResult('incorrect');
-    }
-    setShowResult(true);
-    setTimeout(() => {
-      setShowResult(false);
-      setAnswer('');
-      if (currentIndex < data.length - 1) {
-        setCurrentIndex(currentIndex + 1);
-        setCurrentNumberIndex(0);
-      } else {
-        setFinished(true);
-      }
-    }, 1000);
-  };
+  }
 
-  const FlashAnzanDisplay = memo(({ currentNumber }) => {
-    return (
-      <CSSTransition
-        in={currentNumber !== '?'}
-        timeout={500}
-        classNames={{
-          enter: 'fade-enter',
-          enterActive: 'fade-enter-active',
-          exit: 'fade-exit',
-          exitActive: 'fade-exit-active',
-        }}
-        key={`transition-${currentNumber}`} // Add a unique key for each transition
-      >
-        <div className="flashAnzanDisplay__numbers" style={{ opacity: 1 }}>
-          {console.log('Rendering CSSTransition with currentNumber:', currentNumber)}
-          {currentNumber}
-        </div>
-      </CSSTransition>
-    );
-  });
+  setShowResult(true);
+
+  setTimeout(() => {
+      setShowResult(false);
+      setAnswer(''); // Clear the answer input
+      setShowAnswerInput(false); // Hide the input
+
+      if (currentIndex < data.length - 1) {
+          setCurrentIndex(currentIndex + 1); // Move to the next set of numbers
+          setCurrentNumberIndex(0);
+      } else {
+          setFinished(true); // Mark as finished if no more examples
+      }
+  }, 1000); // Delay before starting the next set
+};
+
+
 
   return (
     <div className="dashboard">
@@ -117,27 +112,58 @@ const FlashAnzanStart = () => {
               <h1>Flash Anzan Start</h1>
               </div>
 
-              <div className="hh">
+               <div className='problem-box mh200 flex-center flex-wrap'>
+         
+            {data[currentIndex] ? (
+                  <div className='flashAnzanDisplay'>
+    {finished ? (
+        <button style={{ marginTop: '20px' }}
+            className="practice-btn orange-bg"
+            onClick={() => navigate(-1)} // Navigate back to the previous page
+        >
+            Go Back
+        </button>
+    ) : (
+        <CSSTransition
+            in={currentNumber !== null} // Animate only when `currentNumber` is not null
+            timeout={periodicity}
+            classNames="fade" // Ensure matching CSS class
+            appear
+            unmountOnExit
+            onEntering={() => console.log("Entering animation for:", currentNumber)}
+            onEntered={() => console.log("Entered animation for:", currentNumber)}
+            onExiting={() => console.log("Exiting animation for:", currentNumber)}
+            onExited={() => console.log("Exited animation for:", currentNumber)}
+        >
+            <div className="flashAnzanDisplay__numbers">
+                {currentNumber}
+            </div>
+        </CSSTransition>
+    )}
 
-              <div className='problem-box'>
-                <div className='sep'></div>
-              {data[currentIndex] ? (
-                    <div className='flashAnzanDisplay'>
-                    <FlashAnzanDisplay currentNumber={currentNumber} />
-               <div className="flashAnzanDisplay__answer">
-                   <input type="text" value={answer} onChange={(event) => setAnswer(event.target.value)} />
-                   <form onSubmit={handleAnswerSubmit}>
-                    <button className='orange-bg' type="submit">Submit</button>
-                  </form>
-                     </div>
-                     
-                    </div>
-                  ) : (
-                    <div>Loading...</div>
-                  )}
-                  </div>
+    {showAnswerInput && !finished && (
+        <div >
+        <form className="flashAnzanDisplay__answer" onSubmit={handleAnswerSubmit}>
+            <input
+                type="number"
+                value={answer}
+                onChange={(event) => setAnswer(event.target.value)}
+                autoFocus // Automatically focuses on the input
+            />
+           
+                <button className='orange-bg' type="submit">Submit</button>
+            </form>
+        </div>
+    )}
+</div>
 
-                  {showResult && (
+) : (
+    <div>Loading...</div>
+)}
+
+             
+
+     {showResult && (
                     <div className='ResultBx'>
                       {result === 'correct' ? (
                         <div className='result correct'>Correct!</div>
@@ -153,7 +179,8 @@ const FlashAnzanStart = () => {
                       <p>Your score is {score} out of {data.length}.</p>
                     </div>
                   )}
-              </div>
+     
+     </div>
 
        
 

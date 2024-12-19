@@ -143,3 +143,35 @@ width: 67%;
 .timer-box span:nth-child(2){
   font-weight: 400;
 }
+
+.results-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+  margin-left: 20px;
+}
+
+.result-box {
+  width: 200px;
+   background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.result-box h4{
+  background-color: #EBDDF2;
+  padding:10px 15px;
+  border-radius: 8px 8px 0 0;
+}
+
+
+.result-box p{
+  padding: 18px;
+}
+
+.table-2{
+  width: 40%;float: left; margin: 20px;
+}

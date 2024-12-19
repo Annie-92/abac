@@ -22,6 +22,8 @@ import Abacus from "./pages/Abacus";
 import Students from "./pages/MyStudents";
 import PrivateRoute from "./components/PrivateRoute";
 import auth from "./utils/auth";
+import { LoaderProvider } from "./context/LoaderContext";
+import GlobalLoader from "./components/GlobalLoader";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -37,7 +39,8 @@ const App = () => {
   };
 
   return (
-    <>
+    <LoaderProvider> {/* Wrap the entire app */}
+  
       <Navbar updateLoggedInState={updateLoggedInState} setIsLoggedIn={setIsLoggedIn} />
 
         <Routes>
@@ -63,8 +66,9 @@ const App = () => {
             <Route path="/my-students" element={<Students />} />
   
         </Routes>
+        <GlobalLoader /> {/* Global loader is always active */}
+        </LoaderProvider>
 
-    </>
   );
 };
 

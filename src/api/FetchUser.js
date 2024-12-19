@@ -16,13 +16,11 @@ const fetchUserData = async () => {
     });
 
 
-    console.log('user Data Log'); // Add this line to see what data is being returned
-    console.log(response.data); // Add this line to see what data is being returned
+
 
     response.data.is_teacher = parseInt(response.data.is_teacher, 10);
 
-    console.log('response');
-    console.log(response);
+
 
     
    return response.data;

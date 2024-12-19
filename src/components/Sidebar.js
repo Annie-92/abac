@@ -13,6 +13,9 @@ import './Sidebar.css';
 import Cookies from 'js-cookie';
 
 import { fetchUserData } from '../api/FetchUser';
+  
+import { useLoader } from "../context/LoaderContext";
+
 
 
 const CustomSubMenu = ({ label, icon, children, onToggle }) => {
@@ -45,31 +48,38 @@ const Sidebar = ({
   handleToggleSidebar,
  
 }) => {
+  const { showLoader, hideLoader } = useLoader(); // Access global loader
+
   const [openedSubMenu, setOpenedSubMenu] = useState(["practice-now"]);
   const [isToggled, setToggled] = useState(toggled);
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [isTeacher, setIsTeacher] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const location = useLocation();
   const isActive = (link) => location.pathname === link;
 
 
   useEffect(() => {
+    showLoader(); // Show loader
     fetchUserData().then((data) => {
-      console.log('Sidebar data log'); // Add this line to see what data is being returned
-      console.log(data); // Add this line to see what data is being returned
+      // console.log('Sidebar data log'); 
+      // console.log(data); 
       if (data) {
         setUserData(data);
         setIsTeacher(data.is_teacher === 1);
+        setIsLoading(false);
       }
+      hideLoader(); // Hide loader after data is fetched
+
     });
   }, []);
 
-  if (!userData) {
-    return <div>Loading...</div>; // or a loading indicator
-  }
+  // if (!userData) {
+  //   return <div className="sidebar-skeleton">Sidebar is loading...</div>;
+  // }
 
 
   const handleLogout = async () => {
@@ -77,7 +87,7 @@ const Sidebar = ({
       const response = await axios.post(API_URL + 'UserLogout.php', {
      
       });
-      console.log(response);
+      // console.log(response);
   
       if (response.status = 200) {
         setLoggedIn(false);

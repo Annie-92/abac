@@ -4,6 +4,17 @@ import Sidebar from "../components/Sidebar";
 import "./Quiz.css";
 import axios from "axios";
 import { API_URL } from '../constants/apiConstants';
+import Alert from '@mui/material/Alert';
+import InfoIcon from '@mui/icons-material/Info';
+import ErrorIcon from '@mui/icons-material/Error';
+import { useLoader } from "../context/LoaderContext";
+
+
+
+
+const getToken = () => localStorage.getItem('token');
+
+
 
 const Quiz = () => {
   const [tables, setTables] = useState([]);
@@ -13,9 +24,15 @@ const Quiz = () => {
   const [isSubmitted, setIsSubmitted] = useState(false); // new state to track submission
   const [grades, setGrades] = useState([]); // new state to store grades
   const [averageGrade, setAverageGrade] = useState(0); // new state to store average grade
+  const [studentGrade, setStudentGrade] = useState(0); // new state to store average grade
+  const [totalAnswers, seTotalAnswers] = useState(0); // new state to store average grade
   const [currentPage, setCurrentPage] = useState(0); // new state to track current page
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [quizStatus, setQuizStatus] = useState({ is_allowed: null, attempts_remaining: 0 });
+  const { showLoader, hideLoader } = useLoader(); // Access loader methods
+
+
+  
 
   const fetchQuizStatus = async () => {
     try {
@@ -44,6 +61,8 @@ const Quiz = () => {
       };
 
       const response = await axios.get(API_URL + "GetQuizRules.php", config);
+      console.log("Fetch Data Response:", response.data); // Add this line
+
       setQuizRules(response.data);
       return response.data;
     } catch (error) {
@@ -52,7 +71,38 @@ const Quiz = () => {
     }
   };
 
+  const initializeAnswers = (totalAnswers) => {
+    setAnswers(Array.from({ length: totalAnswers }, () => []));
+};
+
+const generateRandomNumber = (nbrFrom, nbrTo) => {
+  // Determine the number of digits based on nbrFrom and nbrTo
+  const absNbrFrom = Math.abs(nbrFrom);
+  const absNbrTo = Math.abs(nbrTo);
+
+  let minAbsValue;
+
+  if (absNbrFrom >= 10 && absNbrTo <= 99) {
+    minAbsValue = 10; // Minimum absolute value for 2-digit numbers
+  } else if (absNbrFrom >= 100 && absNbrTo <= 999) {
+    minAbsValue = 100; // Minimum absolute value for 3-digit numbers
+  } else if (absNbrFrom >= 1000 && absNbrTo <= 9999) {
+    minAbsValue = 1000; // Minimum absolute value for 4-digit numbers
+  } else {
+    throw new Error("Range does not support 2, 3, or 4 digits consistently.");
+  }
+
+  // Generate a number within the range and ensure it has the required number of digits
+  let number;
+  do {
+    number = Math.floor(Math.random() * (nbrTo - nbrFrom + 1)) + nbrFrom;
+  } while (Math.abs(number) < minAbsValue);
+
+  return number;
+};
+
   const fetchTables = async () => {
+    showLoader(); // Show the loader
     try {
       const token = localStorage.getItem("token");
       const quizTypeResponse = await axios.get(API_URL + "GetQuizType.php", {
@@ -67,6 +117,7 @@ const Quiz = () => {
         const totalAnswers = data.reduce((total, pageData) => {
           return total + pageData.nbr_tables * pageData.row_nbr * pageData.col_nbr;
         }, 0);
+        initializeAnswers(totalAnswers);
   
         setAnswers(Array(totalAnswers).fill(''));
   
@@ -114,17 +165,43 @@ const Quiz = () => {
                     );
                   }
                 } else {
-                  // Original logic for addition or other quiz types
-                  row.push(
-                    Math.floor(
-                      Math.random() * (parseInt(pageData.nbr_to) - parseInt(pageData.nbr_from) + 1) +
-                        parseInt(pageData.nbr_from)
-                    )
-                  );
+            
+                  const absNbrTo = Math.abs(parseInt(pageData.nbr_to)); // Absolute value of nbr_to
+                  const randomNumber = Math.floor(Math.random() * (absNbrTo + 1)); // Generate number between 0 and absNbrTo
+                 
+
+
+                  let number;
+
+                  if (j === 0) {
+                      // Ensure the first number in the column is positive
+                      number = generateRandomNumber(parseInt(pageData.nbr_from), parseInt(pageData.nbr_to));
+                      number = Math.abs(number);
+                  } else {
+                      // Ensure intermediate sums do not go negative
+                      const previousSum = table[j - 1][k]; // Get the sum from the previous row in the column
+                      const minValue = -previousSum; // Ensure the new number doesn't make the sum negative
+                      const rangeFrom = Math.max(minValue, parseInt(pageData.nbr_from));
+                      const rangeTo = parseInt(pageData.nbr_to);
+                      
+                      number = generateRandomNumber(rangeFrom, rangeTo);
+                  }
+
+                  row.push(number);
+                  
                 }
               }
               table.push(row);
             }
+
+            for (let col = 0; col < pageData.col_nbr; col++) {
+              let columnSum = table.reduce((sum, row) => sum + row[col], 0);
+              if (columnSum < 0) {
+                table[table.length - 1][col] += Math.abs(columnSum); // Adjust the last row in the column
+              }
+            }
+  
+
             tablesArray.push({ table, quiz_type: pageData.quiz_type });
           }
           return tablesArray;
@@ -148,15 +225,19 @@ const Quiz = () => {
       }
     } catch (error) {
       console.error('Error fetching tables:', error);
+    } finally {
+      hideLoader(); // Hide the loader after the process
     }
   };
   
 
   useEffect(() => {
-    if (quizStatus.is_allowed) {
+    const token = getToken();
+    if (token && quizStatus.is_allowed) {
       fetchTables();
     }
-  }, [quizStatus]);
+  }, [quizStatus.is_allowed]);
+  
 
 
  
@@ -169,52 +250,107 @@ const Quiz = () => {
     setCurrentPage(currentPage - 1);
   };
 
-  const handleSubmit = () => {
+
+const padAnswersArray = () => {
+  const maxAnswersPerTable = tables.map(({ table }) => table[0]?.length || 0);
+
+  return answers.map((tableAnswers, index) => {
+    if (!Array.isArray(tableAnswers)) tableAnswers = [];
+    const expectedLength = maxAnswersPerTable[index] || 0;
+
+    // Ensure the expected length does not create a negative array length
+    if (expectedLength < tableAnswers.length) {
+      console.warn(`Unexpected answer length for table at index ${index}`);
+      return tableAnswers.slice(0, expectedLength);
+    }
+
+    return [...tableAnswers, ...Array(expectedLength - tableAnswers.length).fill("")];
+  });
+};
+
+
+
+
+
+  const handleSubmit = async () => {
+    if (isSubmitted) return; // Prevent multiple submissions
+
     setIsSubmitted(true);
+
+    const paddedAnswers = padAnswersArray();
+    
     const newGrades = [];
     let totalGrade = 0;
     let totalAnswers = 0;
     const correctAnswersList = [];
-  
+
     tables.forEach(({ table, quiz_type }, tableIndex) => {
-      let operation = '';
-      if (quiz_type === 'multiplication') {
-        operation = (a, b) => a * b;
-      } else if (quiz_type === 'division') {
-        operation = (a, b) => a / b;
-      } else {
-        operation = (a, b) => a + b;
-      }
-  
-      let correctAnswers = [];
-      if (quiz_type === 'multiplication' || quiz_type === 'division') {
-        correctAnswers = table.map((row) => operation(row[0], row[1]));
-        const userAnswers = answers[tableIndex] || [];
-        const grade = correctAnswers.reduce((total, correctAnswer, rowIndex) => 
-          total + (correctAnswer === parseInt(userAnswers[rowIndex], 10) ? 1 : 0), 0);
-        newGrades.push(grade / correctAnswers.length);
-        totalGrade += grade;
-        totalAnswers += correctAnswers.length;
-        correctAnswersList.push(correctAnswers);
-      } else {
-        const sums = table[0].map((_, i) => table.reduce((a, row) => operation(a, row[i]), 0));
-        const userAnswers = answers[tableIndex] || [];
-        const grade = sums.reduce((total, sum, i) => total + (sum === parseInt(userAnswers[i], 10) ? 1 : 0), 0);
-        newGrades.push(grade / sums.length);
-        totalGrade += grade;
-        totalAnswers += sums.length;
-        correctAnswersList.push(sums);
-      }
+        let operation;
+        if (quiz_type === 'multiplication') {
+            operation = (a, b) => a * b;
+        } else if (quiz_type === 'division') {
+            operation = (a, b) => a / b;
+        } else {
+            operation = (a, b) => a + b;  // For addition
+        }
+
+        const userAnswers = paddedAnswers[tableIndex] || [];
+
+        // Calculate correct answers for addition or other types
+        if (quiz_type === 'addition') {
+            const columnSums = table[0].map((_, colIndex) => 
+                table.reduce((sum, row) => sum + parseInt(row[colIndex], 10), 0)
+            );
+            correctAnswersList.push(columnSums);
+            const grade = columnSums.reduce((total, correctSum, colIndex) => {
+                const userAnswer = userAnswers[colIndex] || ""; // Handle empty strings
+                return total + (String(correctSum) === String(userAnswer) ? 1 : 0);
+            }, 0);
+            newGrades.push(grade / columnSums.length);
+            totalGrade += grade;
+            totalAnswers += columnSums.length;
+        } else {
+            const correctAnswers = table.map((row) => operation(parseInt(row[0], 10), parseInt(row[1], 10)));
+            correctAnswersList.push(correctAnswers);
+            const grade = correctAnswers.reduce((total, correctAnswer, rowIndex) => {
+                const userAnswer = userAnswers[rowIndex] || ""; // Handle empty strings
+                return total + (String(correctAnswer) === String(userAnswer) ? 1 : 0);
+            }, 0);
+            newGrades.push(grade / correctAnswers.length);
+            totalGrade += grade;
+            totalAnswers += correctAnswers.length;
+        }
     });
-  
+
     setGrades(newGrades);
     setAverageGrade(totalGrade / totalAnswers);
     setCorrectAnswers(correctAnswersList);
-  };
+
+    setStudentGrade(totalGrade);
+    seTotalAnswers(totalAnswers);
+
+    const payload = {
+      answers: JSON.stringify(paddedAnswers.map(pageAnswers => pageAnswers.map(answer => answer || ""))),
+      percentage: (totalGrade / totalAnswers) * 100,
+        score: totalGrade,
+        over: totalAnswers
+    };
+
+    try {
+        const token = getToken();
+        const response = await axios.post(API_URL + 'PostQuiz.php', new URLSearchParams(payload), {
+            headers: { token: `${token}` }
+        });
+        console.log("Submission Response:", response.data);
+    } catch (error) {
+        console.error("Error submitting quiz:", error);
+    }
+};
+
   
 
   const handleTimeUp = () => {
-    handleSubmit();
+ if (!isSubmitted) handleSubmit();
   };
 
   useEffect(() => {
@@ -240,7 +376,7 @@ const Quiz = () => {
 
     if (quiz_type === 'multiplication' || quiz_type === 'division') {
       return (
-        <table key={index}>
+        <table className='table-2' key={index}>
        
           <tbody>
             {table.map((row, rowIndex) => (
@@ -253,6 +389,7 @@ const Quiz = () => {
                 <td>
                   <input
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     style={{ width: '60px' }}
                     value={answers[currentPage * 4 + index]?.[rowIndex] || ''}
                     onChange={(e) => {
@@ -301,6 +438,7 @@ const Quiz = () => {
                 <td key={cellIndex}>
                   <input
                     type="number"
+                    onWheel={(e) => e.target.blur()}
                     style={{ width: '60px' }}
                     value={answers[currentPage * 4 + index]?.[cellIndex] || ''}
                     onChange={(e) => {
@@ -330,6 +468,8 @@ const Quiz = () => {
 
 
   if (quizStatus.is_allowed === 0) {
+    console.log('quizStatus');
+    console.log(quizStatus);
     return (
       <div className="dashboard">
         <div className="SideMenu">
@@ -337,8 +477,25 @@ const Quiz = () => {
         </div>
         <div className="dashboard__content">
           <div className="message">
-            <h2>Your daily quiz attempts are over. Please try again tomorrow.</h2>
+          <Alert
+              sx={{ bgcolor: '#E15C83', color: 'white' }}
+              severity="error"
+              icon={<ErrorIcon sx={{ color: 'white' }} />}
+            >
+              Your daily quiz attempts are over. Please try again tomorrow.
+            </Alert>
+    
           </div>
+
+          <div className="results-container">
+  {quizStatus.results.map((result, index) => (
+    <div key={index} className="result-box">
+      <h4>Quiz {index + 1}</h4>
+      <p>Score: <strong>{result.score} / {result.over}</strong></p>
+    </div>
+  ))}
+</div>
+
         </div>
       </div>
     );
@@ -354,15 +511,26 @@ const Quiz = () => {
         <div className='tableContent'>
           <div className="db_content">
              {/* Display the number of attempts remaining */}
-             <div className="attempts-remaining">
-                <h3>Attempts Remaining: {quizStatus.attempts_remaining}</h3>
-              </div>
-            {timeLeft > 0 &&!isSubmitted && (
-              <div className="timer">
+             <div className='message'>
+             <Alert
+                sx={{ bgcolor: '#E15C83', color: 'white' }}
+                severity="info"
+                icon={<InfoIcon sx={{ color: 'white' }} />}
+              >
+                Attempts Remaining: {quizStatus.attempts_remaining}
+              </Alert>
+             </div>
+           
+
+             {quizStatus.is_allowed && timeLeft > 0 && !isSubmitted && (
+
+             <div className="timer">
                 Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>
             )}
+            <div className='flex-center flex-wrap'>
             {displayedTables}
+            </div>
             <div className='flex-center'>
             {currentPage > 0 && (
               <button className='pageBtn' type="primary" onClick={handlePrevPage}>
@@ -377,9 +545,11 @@ const Quiz = () => {
             </div>
 
             <div className='flex-center'>
-            {isSubmitted? (
+            {quizStatus.is_allowed && isSubmitted ? (
               <div>
-                <h2>Grade: {(averageGrade * 100).toFixed(1)}/100</h2>
+          
+                <h2>Grade: {studentGrade} / {totalAnswers}</h2>
+
                 <button className='submitBtn' type="primary" onClick={() => window.location.reload()}>Try Again</button>
               </div>
             ) : (
@@ -388,7 +558,7 @@ const Quiz = () => {
               </button>
             )}
             </div>
-            {timeLeft > 0 &&!isSubmitted && (
+            {quizStatus.is_allowed && timeLeft > 0 && !isSubmitted && (
               <div className="timer">
                 Time Left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>

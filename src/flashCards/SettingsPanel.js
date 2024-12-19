@@ -51,8 +51,8 @@ function SettingsPanel(props) {
             Single 
           </button>
           <button 
-            className={`option ${gameMode === 'multiPlayer' ? 'active' : ''}`}
-            onClick={() => handleGameModeChange('multiPlayer')}
+            className={`option ${gameMode === 'inClass' ? 'active' : ''}`}
+            onClick={() => handleGameModeChange('inClass')}
           >
             In Class
           </button>
@@ -158,6 +158,13 @@ function SettingsPanel(props) {
           >
             5.0
           </button>
+          <button 
+            className={`option ${periodicity === 20000 ? 'active' : ''}`}
+            onClick={() => handlePeriodicityChange(20000)}
+          >
+            20.0
+          </button>
+        
         </div>
       </div>
 

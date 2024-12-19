@@ -27,11 +27,17 @@ const FlashCards = () => {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [currentAnzanIndex, setCurrentAnzanIndex] = useState(0); // new state to keep track of current Anzan index
   const [currentAnzanValues, setCurrentAnzanValues] = useState([[0]]); // initialize with an empty array of arrays
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+
+
+  const [inputsDisabled, setInputsDisabled] = useState(false);
+
   
   
  const navigate = useNavigate();
  
  const generateAnzanValues = (numCards, difficulty) => {
+
   const minValue = 
     difficulty === '1D' ? 0 : 
     difficulty === '2D' ? 10 : 
@@ -57,56 +63,87 @@ const FlashCards = () => {
   return values;
 };
 
-useEffect(() => {
-  // This useEffect will just handle the display of Anzans at intervals
-  if (gameStarted && currentImpression < numImpressions) {
-    const timer = setTimeout(() => {
-      const generatedValues = generateAnzanValues(numCards, difficulty);
 
-      setCurrentAnzanValues(prev => [...prev, generatedValues]); // Add new Anzan to the array
-      setValues(generatedValues); // Update values for the next Anzan
-      setAnswersReady(true); // Allow the user to input answers
+useEffect(() => {
+  if (gameStarted && currentImpression < numImpressions) {
+    const generatedValues = generateAnzanValues(numCards, difficulty); // Generate all values for this impression
+    setCurrentAnzanValues([generatedValues]); // Store the generated values
+    setValues(generatedValues); // Set the generated values for reference
+
+    let intervalId = setInterval(() => {
+      setCurrentCardIndex((prevIndex) => {
+        const nextIndex = prevIndex + 1;
+        if (nextIndex >= numCards) {
+          clearInterval(intervalId); // Stop the interval when all cards are displayed
+          setAnswersReady(true); // Enable input after all cards are displayed
+          return prevIndex; // Keep the last index
+        }
+        return nextIndex; // Advance to the next card
+      });
     }, periodicity);
 
-    return () => clearTimeout(timer);
+    return () => clearInterval(intervalId); // Cleanup the interval
   }
 }, [gameStarted, currentImpression, numImpressions, periodicity, difficulty, numCards]);
 
 
 
-  useEffect(() => {
-    const generatedValues = generateAnzanValues(numCards, difficulty);
-    setCurrentAnzanValues([generatedValues]);
-    setValues(generatedValues);
-    setAnswersReady(true);
-  }, []);
 
 
-  const handleAnswerSubmit = (answers) => {
-    console.log('Generated values:', currentAnzanValues[currentAnzanIndex]);
-    console.log('User answers:', answers);
-    const correctAnswers = [...currentAnzanValues[currentAnzanIndex]];
-    const isCorrect = answers.every((answer, index) => parseInt(answer) === correctAnswers[index]);
-  
-    if (isCorrect) {
-      setCorrectCount(correctCount + 1);
-      setFeedbackMessage('Correct!');
-    } else {
-      setFeedbackMessage('Incorrect!');
-    }
-  
-    // Move to the next impression only after the user submits the answer
-    if (currentImpression + 1 < numImpressions) {
-      setCurrentImpression(currentImpression + 1); // Increment impression count
-      setAnswersReady(false); // Disable answers until the next Anzan is shown
-      setCurrentAnzanIndex(currentAnzanIndex + 1); // Increment the Anzan index
-    } else {
-      // End the game after all impressions are done
-      setGameStarted(false);
-      setAnswersReady(false);
-      setShowResults(true); // Show the results at the end
-    }
-  };
+
+useEffect(() => {
+  const generatedValues = generateAnzanValues(numCards, difficulty); // Generate multiple values
+  setCurrentAnzanValues([generatedValues]); // Initialize the state with the generated values
+  setValues(generatedValues); // Set the current values
+  setAnswersReady(true); // Allow input
+}, [numCards, difficulty]);
+
+
+
+const handleAnswerSubmit = (answers) => {
+  console.log('Generated values:', currentAnzanValues[currentAnzanIndex]);
+  console.log('User answers:', answers);
+
+  const correctAnswers = currentAnzanValues[currentAnzanIndex];
+  if (!correctAnswers) {
+    console.error('Correct answers are undefined.');
+    return;
+  }
+
+  const correctness = answers.map((answer, index) => parseInt(answer) === correctAnswers[index]);
+  const isCorrect = correctness.every((val) => val);
+
+  setUserAnswers((prevAnswers) => [
+    ...prevAnswers,
+    { answers, correctness },
+  ]);
+
+  if (isCorrect) {
+    setCorrectCount((prevCount) => prevCount + 1);
+    setFeedbackMessage('Correct!');
+  } else {
+    setFeedbackMessage('Incorrect!');
+  }
+
+  // Disable inputs after submission
+  setInputsDisabled(true);
+
+  if (currentImpression + 1 < numImpressions) {
+    const newGeneratedValues = generateAnzanValues(numCards, difficulty);
+    setCurrentAnzanValues([newGeneratedValues]);
+    setValues(newGeneratedValues);
+    setCurrentCardIndex(0);
+    setCurrentImpression((prevImpression) => prevImpression + 1);
+    setAnswersReady(false);
+  } else {
+    setGameStarted(false);
+    setAnswersReady(false);
+    setShowResults(true);
+  }
+};
+
+
+
 
   const handleStartGame = () => {
     if (numCards > 0 && numImpressions > 0) {
@@ -129,12 +166,37 @@ useEffect(() => {
   };
 
   const handleGenerateNewAnzan = () => {
-    setCurrentImpression(0);
-    setAnswersReady(false);
-    setFeedbackMessage(''); // Clear feedback message
+    setGameStarted(true); // Ensure the game state is active
+    setCurrentImpression(0); // Reset the impression count
+    setCorrectCount(0); // Reset the correct count
+    setUserAnswers([]); // Clear previous user answers
+    setAnswersReady(false); // Disable input until new Anzan is displayed
+    setShowResults(false); // Hide results panel
+    setFeedbackMessage(''); // Clear any feedback messages
+    setInputsDisabled(false); // Enable inputs
+  
+    const generatedValues = generateAnzanValues(numCards, difficulty); // Generate new values
+    setCurrentAnzanValues([generatedValues]); // Update current Anzan values
+    setValues(generatedValues); // Update displayed values
+  
+    // Ensure the input is enabled after displaying the Anzan
+    setTimeout(() => {
+      setAnswersReady(true); // Enable input after Anzan display
+    }, periodicity * numCards); // Wait until all cards are displayed
   };
+  
+  
 
   const percentageCorrect = numImpressions > 0 ? (correctCount / numImpressions) * 100 : 0;
+
+  const handleBreakComplete = () => {
+    if (currentImpression < numCards - 1) {
+      setCurrentImpression((prev) => prev + 1);
+    } else {
+      setAnswersReady(true);
+    }
+  };
+
 
   return (
     <div className="dashboard">
@@ -187,40 +249,81 @@ useEffect(() => {
                       Generate New Anzan
                     </button>
                   </div>
-                  {feedbackMessage && <p className='feedback-message'>{feedbackMessage}</p>}
+                  {feedbackMessage && (
+              <p className={`feedback-message ${feedbackMessage === 'Correct!' ? 'green' : 'red'}`}>
+                {feedbackMessage}
+              </p>
+            )}
 
-                  {answersReady ? (
-                    <AnswerInput
-                      numCards={numCards}
-                      handleSubmit={handleAnswerSubmit}
-                    />
-                  ) : (
-                    <AnzanComponent
-                      numCards={numCards}
+
+                  {answersReady  ? (
+                     <AnswerInput
+                     numCards={numCards}
+                     handleSubmit={handleAnswerSubmit}
+                     correctAnswers={currentAnzanValues[0]} // All generated values
+                     disabled={inputsDisabled}
+                     gameMode={gameMode} // Pass the gameMode prop
+
+
+
+                   />
+                    ) : (
+                      <AnzanComponent
+                      numCards={numCards} // Always display one Anzan at a time
                       difficulty={difficulty}
-                      values={values} // Generate values based on your logic
+                      values={[currentAnzanValues[0][currentCardIndex]]} // Current card value
                       periodicity={periodicity}
-                    />
-                  )}
+                      onBreakComplete={handleBreakComplete}
+
+                      />
+                    )}
                 </div>
               )}
-              {showResults && (
-                     <div className='practice-panel'>
-                        <div className='flex-center' style={{ marginTop: '20px' }}>
-                    <button className='practice-btn red-bg' onClick={handleRefreshPage} type="button">
-                           Go Back 
-                    </button>
-               
+      {showResults && (
+  <div className='practice-panel'>
+    <div className='flex-center' style={{ marginTop: '20px' }}>
+      <button className='practice-btn red-bg' onClick={handleRefreshPage} type="button">
+        Go Back
+      </button>
+    </div>
+
+            <div className="answers-list flex-center">
+          {userAnswers.map((entry, index) => (
+            <div key={index} className="answer-row">
+              {entry.answers.map((ans, idx) => (
+                <div
+                  key={idx}
+                  className={`answer-box ${
+                    entry.correctness[idx] ? 'correct' : 'incorrect'
+                  }`}
+                >
+                  <div className="answer-content">
+                    <span className="user-answer">{ans}</span>
+                    {!entry.correctness[idx] && (
+                      <span className="correct-answer">
+                        {currentAnzanValues[index][idx]}
+                      </span>
+                    )}
                   </div>
-                  <div className='flex-center'>
-                  <div className='results-panel '>
-                  <h2>Results</h2>
-                  <p>{correctCount} out of {numImpressions} correct ({percentageCorrect.toFixed(2)}%)</p>
                 </div>
-                  </div>
-               
-                </div>
-              )}
+              ))}
+            </div>
+          ))}
+        </div>
+
+
+    <div className='flex-center'>
+   
+      <div className='results-panel'>
+        <h2>Results</h2>
+        <p>{correctCount} out of {numImpressions} correct ({percentageCorrect.toFixed(2)}%)</p>
+     
+      </div>
+    </div>
+  </div>
+)}
+
+
             </div>
           </div>
         </div>

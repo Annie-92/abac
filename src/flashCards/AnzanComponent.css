@@ -8,10 +8,70 @@
 	text-align:center;
 	display:none;
 }
+
+.AnzanArea{
+	/* height: 600px; */
+}§
+.interim-div {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	font-size: 2rem;
+  }
+
+  .answers-lis{
+	height: 100px;
+  }
+
+  .answer-box {
+	display: inline-block;
+	padding: 20px;
+	margin: 10px;
+	border-radius: 10px;
+	font-size: 1.5rem;
+	color: #fff;
+	text-align: center;
+	position: relative; /* Allow positioning for child elements */
+	width: 100px; /* Adjust as needed for size */
+	height: 50px;
+  }
+  
+  .answer-box.correct {
+	background-color: #3CB371;
+  }
+  
+  .answer-box.incorrect {
+	background-color: #fd4059;
+  }
+  
+  .answer-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+  }
+  
+  .correct-answer {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #57ff57; /* Highlight the correct answer */
+  }
+  
+	
+  
+
 #anzan {
 	display:inline-block;
 	margin:40px auto;
-	/* height:513px; */
+	height: 600px; /* Match Anzan height */
+
 	overflow:hidden;
 	border: 5px solid #7b7b7b;
 	position: relative;
@@ -94,9 +154,148 @@
 
 
 
+.fade-enter {
+	opacity: 0;
+	transform: scale(0.9);
+  }
+  .fade-enter-active {
+	opacity: 1;
+	transform: scale(1);
+	transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-exit {
+	opacity: 1;
+	transform: scale(1);
+  }
+  .fade-exit-active {
+	opacity: 0;
+	transform: scale(0.9);
+	transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  
+  .slide-enter {
+	transform: translateX(-100%);
+	opacity: 0;
+  }
+  .slide-enter-active {
+	transform: translateX(0);
+	opacity: 1;
+	transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  .slide-exit {
+	transform: translateX(0);
+	opacity: 1;
+  }
+  .slide-exit-active {
+	transform: translateX(100%);
+	opacity: 0;
+	transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .zoom-enter {
+	transform: scale(0.5);
+	opacity: 0;
+  }
+  .zoom-enter-active {
+	transform: scale(1);
+	opacity: 1;
+	transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  .zoom-exit {
+	transform: scale(1);
+	opacity: 1;
+  }
+  .zoom-exit-active {
+	transform: scale(0.5);
+	opacity: 0;
+	transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .fade-scale-enter {
+	opacity: 0;
+	transform: scale(0.5);
+  }
+  .fade-scale-enter-active {
+	opacity: 1;
+	transform: scale(1);
+	transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-scale-exit {
+	opacity: 1;
+	transform: scale(1);
+  }
+  .fade-scale-exit-active {
+	opacity: 0;
+	transform: scale(0.5);
+	transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
 
 
+  .FlashCardsForm {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+  }
+
+  .input-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%; /* Full width for responsiveness */
+  }
+
+  .input-box {
+	max-width: 100px; /* Optional: set a maximum width */
+	margin: 10px;
+  }
+  
+  .input-field {
+	
+	width: 100% !important;
+	padding: 10px;
+	font-size: 1rem;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	text-align: center;
+	height: 50px !important;
+  }
+
+  .input-field.correct {
+	background-color: #3cb371; /* Green for correct */
+	color: white;
+  }
+  
+  .input-field.incorrect {
+	background-color: #fd4059; /* Red for incorrect */
+	color: white;
+  }
 
 
+  .input-box input[type="text"] {
+     width: 100% !important; max-width: unset !important;
+    
+  }
 
-
+  .question-mark {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	font-size: 2rem;
+	font-weight: bold;
+	color: #ccc;
+	background-color: #f5f5f5;
+	border-radius: 5px;
+  }
+  
+  .correct-answer {
+	margin-top: 5px;
+	font-size: 1rem;
+	color: green;
+	font-weight: bold;
+	text-align: center;
+  }
+  
